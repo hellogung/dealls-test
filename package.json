@@ -1,0 +1,23 @@
+{
+  "name": "dealls-payslip",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "seeds": "bun run seeds/index.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.8.0",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.44.2",
+    "drizzle-seed": "^0.3.1",
+    "hono": "^4.7.11",
+    "pg": "^8.16.0",
+    "winston": "^3.17.0",
+    "zod": "^3.25.64"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.15.4",
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.20.3"
+  }
+}
