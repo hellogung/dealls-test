@@ -1,25 +1,26 @@
 import { Hono } from "hono";
-import { AttendanceService } from "../service/attendance.service";
-import { AttendanceValidator } from "../validator/attendance.validator";
+import { OvertimeValidator } from "../validator/overtime.validator";
 import { ZodError } from "zod";
+import { OvertimeService } from "../service/overtime.service";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.middleware";
 
-const attendance = new Hono();
+const overtime = new Hono()
 
-attendance
+overtime
     .post(authMiddleware, roleMiddleware("employee"), async (c) => {
+        const user = c.get("user") as { id: number }
+        const body = await c.req.json()
+        const request = {
+            user_id: user.id,
+            ...body
+        }
+
         try {
-            const user = c.get("user") as { id: number }
-            
-            const request = {
-                user_id: user.id
-            }
+            const validate = OvertimeValidator.CREATE.parse(request)
 
-            const validate = AttendanceValidator.CREATE.parse(request)
+            const response = await OvertimeService.create(validate)
 
-            const response = await AttendanceService.create(validate)
-            return c.json({ data: response });
-
+            return c.json({ data: response })
         } catch (error) {
             if (error instanceof ZodError) {
                 return c.json({
@@ -33,7 +34,6 @@ attendance
                 message: error instanceof Error ? error.message : "Unknown error"
             }, 500);
         }
-
     })
 
-export default attendance;
+export default overtime

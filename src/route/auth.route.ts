@@ -24,6 +24,8 @@ auth.post("login", async (c) => {
     const payload = {
         id: user[0].id,
         role: user[0].role,
+        full_name: user[0].full_name,
+        username: user[0].username,
         exp: Math.floor(Date.now() / 1000) + 60 * 60, // Token expires in 1 hour
     }
 
@@ -58,7 +60,11 @@ auth.get('/admin', authMiddleware, roleMiddleware('admin'), (c) => {
 
 // Hanya employee
 auth.get('/employee', authMiddleware, roleMiddleware('employee'), (c) => {
-    return c.json({ message: 'Hello Employee!' });
+    const user = c.get("user")
+    return c.json({
+        message: 'Hello Employee!',
+        user_id: user.id
+    });
 });
 
 // Bisa admin atau employee

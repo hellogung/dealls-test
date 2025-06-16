@@ -9,9 +9,9 @@ export const AttendanceSchema = pgTable("attendances", {
     updated_at: timestamp({ withTimezone: true }).defaultNow().notNull()
 })
 
-export const attendanceRelations = relations(AttendanceSchema, ({ one }) => ({
-    user: one(userSchema, {
-        fields: [AttendanceSchema.user_id],
-        references: [userSchema.id],
-    }),
-}));
+// export const attendanceRelations = relations(AttendanceSchema, ({ one }) => ({
+//     user: one(userSchema, {
+//         fields: [AttendanceSchema.user_id],
+//         references: [userSchema.id],
+//     }),
+// }));

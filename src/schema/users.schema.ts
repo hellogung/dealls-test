@@ -15,6 +15,6 @@ export const userSchema = pgTable("users", {
     updated_at: timestamp({ withTimezone: true }).defaultNow().notNull()
 })
 
-export const userRelations = relations(userSchema, ({ many }) => ({
-    attendances: many(AttendanceSchema)
-}));
+// export const userRelations = relations(userSchema, ({ many }) => ({
+//     attendances: many(AttendanceSchema)
+// }));
