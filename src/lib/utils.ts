@@ -10,3 +10,7 @@ export function convertToTimeZone(date: Date, timeZone: string = 'Asia/Jakarta')
     const jakartaDate = new Date(date.getTime() + (7 * 60 * 60 * 1000))
     return toZonedTime(jakartaDate, timeZone);
 }
+
+export function toTimeZoneIndonesia(date: Date): Date {
+    return new Date(date.getTime() + (7 * 60 * 60 * 1000))
+}

@@ -3,6 +3,7 @@ import { OvertimeValidator } from "../validator/overtime.validator";
 import { ZodError } from "zod";
 import { OvertimeService } from "../service/overtime.service";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.middleware";
+import { CreateOvertimeRequest } from "../model/overtime.model";
 
 const overtime = new Hono()
 
@@ -10,7 +11,7 @@ overtime
     .post(authMiddleware, roleMiddleware("employee"), async (c) => {
         const user = c.get("user") as { id: number }
         const body = await c.req.json()
-        const request = {
+        const request: CreateOvertimeRequest = {
             user_id: user.id,
             ...body
         }

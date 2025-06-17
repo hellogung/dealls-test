@@ -3,6 +3,7 @@ import { AttendanceService } from "../service/attendance.service";
 import { AttendanceValidator } from "../validator/attendance.validator";
 import { ZodError } from "zod";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.middleware";
+import { CreateAttendanceRequest } from "../model/attendance.model";
 
 const attendance = new Hono();
 
@@ -10,8 +11,8 @@ attendance
     .post(authMiddleware, roleMiddleware("employee"), async (c) => {
         try {
             const user = c.get("user") as { id: number }
-            
-            const request = {
+
+            const request: CreateAttendanceRequest = {
                 user_id: user.id
             }
 

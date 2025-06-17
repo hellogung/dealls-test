@@ -2,11 +2,31 @@ import { and, eq, sql } from "drizzle-orm";
 import db from "../config/database";
 import { Attendance, AttendanceResponse, CreateAttendanceRequest, toAttendanceResponse } from "../model/attendance.model";
 import { AttendanceSchema } from "../schema/attendance.schema";
+import { PayrollSchema } from "../schema/payroll.schema";
+import { convertToTimeZone, toTimeZoneIndonesia } from "../lib/utils";
 
 export class AttendanceService {
     static async create(request: CreateAttendanceRequest): Promise<AttendanceResponse> {
         try {
-            const today = new Date()
+            const today = toTimeZoneIndonesia(new Date())
+            const todayStr = today.toISOString().slice(0,10)
+            
+            console.log(todayStr)
+
+            // Cek apakah tanggal ini sudah di-publish ke payroll
+            const isPayrollFinalized = await db.select().from(PayrollSchema).where(
+                and(
+                    eq(PayrollSchema.user_id, 4),
+                    eq(PayrollSchema.payroll_date, todayStr),
+
+                )
+            )
+
+            console.log(isPayrollFinalized)
+
+            if (isPayrollFinalized.length == 0) {
+                throw new Error("Tanggal ini sudah di payroll. Anda tidak bisa lagi menambahkan atau mengubah")
+            }
 
             // Cek apakah sudah pernah absen hari ini
             const hasAttendance = await this.todayHasAttendance(request.user_id)

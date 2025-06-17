@@ -11,8 +11,8 @@ export const userSchema = pgTable("users", {
     password: varchar({ length: 255 }).notNull(),
     gaji: bigint({ mode: "bigint" }).notNull(),
     role: roleEnum().notNull().default("employee"),
-    created_at: timestamp({ withTimezone: true }).defaultNow().notNull(),
-    updated_at: timestamp({ withTimezone: true }).defaultNow().notNull()
+    created_at: timestamp().defaultNow().notNull(),
+    updated_at: timestamp().defaultNow().notNull()
 })
 
 // export const userRelations = relations(userSchema, ({ many }) => ({

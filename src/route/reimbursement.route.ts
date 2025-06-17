@@ -9,11 +9,10 @@ const reimbursement = new Hono
 
 reimbursement.post(authMiddleware, roleMiddleware("employee"), async (c) => {
     const user = c.get("user") as { id: number }
-    const body = await c.req.json() as { amount: bigint, description: string }
-    const request = {
+    const body = await c.req.json() as { amount: number, description: string }
+    const request: CreateReimbursementRequest = {
         user_id: user.id,
         ...body,
-        amount: BigInt(body.amount)
     }
 
     try {

@@ -4,8 +4,8 @@ import { userSchema } from "./users.schema";
 export const ReimbursementSchema = pgTable("reimbursements", {
     id: serial().primaryKey(),
     user_id: integer().notNull().references(() => userSchema.id),
-    amount: bigint({ mode: "number" }).notNull(),
+    amount: integer().notNull(),
     description: varchar().notNull(),
-    created_at: timestamp({ withTimezone: true }).defaultNow().notNull(),
-    updated_at: timestamp({ withTimezone: true }).defaultNow().notNull()
+    created_at: timestamp().defaultNow().notNull(),
+    updated_at: timestamp().defaultNow().notNull()
 })
