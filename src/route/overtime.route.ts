@@ -4,11 +4,12 @@ import { ZodError } from "zod";
 import { OvertimeService } from "../service/overtime.service";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.middleware";
 import { CreateOvertimeRequest } from "../model/overtime.model";
+import { checkPayrollFinalization } from "../middleware/payroll.middleware";
 
 const overtime = new Hono()
 
 overtime
-    .post(authMiddleware, roleMiddleware("employee"), async (c) => {
+    .post(authMiddleware, roleMiddleware("employee"), checkPayrollFinalization, async (c) => {
         const user = c.get("user") as { id: number }
         const body = await c.req.json()
         const request: CreateOvertimeRequest = {

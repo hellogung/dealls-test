@@ -8,8 +8,7 @@ import { convertToTimeZone, toTimeZoneIndonesia } from "../lib/utils";
 export class PayrollService {
     static async create(request: CreatePayrollRequest): Promise<PayrollResponse> {
         try {
-            const {start_date, end_date} = request
-            console.log(request)
+            const { start_date, end_date } = request;
             const now = new Date();
 
             // Ambil user_id dan tanggal dari attendance
@@ -50,12 +49,14 @@ export class PayrollService {
 
             const uniquePayrolls = Array.from(uniqueMap.values());
 
-            console.log(uniquePayrolls)
-
-            // Query Insert data
-            // if (uniquePayrolls.length > 0) {
-
-            // }
+            if (uniquePayrolls.length === 0) {
+                return {
+                    message: "No payroll data found for the given date range",
+                    payrolls: [],
+                    created_at: convertToTimeZone(now),
+                    updated_at: convertToTimeZone(now)
+                };
+            }
 
             const values = uniquePayrolls.map(item =>
                 sql`(${item.user_id}, ${item.payroll_date})`
@@ -68,12 +69,9 @@ export class PayrollService {
                     returning user_id, payroll_date, created_at
                 `);
 
-            // `result.rows` berisi hanya baris yang berhasil di-insert
             const insertedPayrolls = response.rows as { user_id: number; payroll_date: Date; created_at: Date }[];
+            const message = insertedPayrolls.length > 0 ? "Payroll added successfully" : "No new payroll records were added";
 
-            const message = insertedPayrolls.length > 0 ? "Payroll added successfully" : "Nothing happen"
-
-            // Response
             return {
                 message,
                 payrolls: insertedPayrolls.map(p => ({
@@ -84,7 +82,6 @@ export class PayrollService {
                 created_at: convertToTimeZone(now),
                 updated_at: convertToTimeZone(now)
             };
-
 
         } catch (error) {
             throw error instanceof Error ? error : new Error("Unknown error occurred")

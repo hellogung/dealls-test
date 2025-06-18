@@ -4,10 +4,11 @@ import { ReimbursementValidator } from "../validator/reimbursement.validator";
 import { ReimbursementService } from "../service/reimbursement.service";
 import { ZodError } from "zod";
 import { CreateReimbursementRequest } from "../model/reimbursement.model";
+import { checkPayrollFinalization } from "../middleware/payroll.middleware";
 
 const reimbursement = new Hono
 
-reimbursement.post(authMiddleware, roleMiddleware("employee"), async (c) => {
+reimbursement.post(authMiddleware, roleMiddleware("employee"), checkPayrollFinalization, async (c) => {
     const user = c.get("user") as { id: number }
     const body = await c.req.json() as { amount: number, description: string }
     const request: CreateReimbursementRequest = {

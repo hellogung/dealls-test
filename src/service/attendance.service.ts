@@ -6,35 +6,15 @@ import { PayrollSchema } from "../schema/payroll.schema";
 import { convertToTimeZone, toTimeZoneIndonesia } from "../lib/utils";
 
 export class AttendanceService {
-    static async create(request: CreateAttendanceRequest): Promise<AttendanceResponse> {
+    static async create(request: CreateAttendanceRequest): Promise<any> {
         try {
-            const today = toTimeZoneIndonesia(new Date())
-            const todayStr = today.toISOString().slice(0,10)
-            
-            console.log(todayStr)
-
-            // Cek apakah tanggal ini sudah di-publish ke payroll
-            const isPayrollFinalized = await db.select().from(PayrollSchema).where(
-                and(
-                    eq(PayrollSchema.user_id, 4),
-                    eq(PayrollSchema.payroll_date, todayStr),
-
-                )
-            )
-
-            console.log(isPayrollFinalized)
-
-            if (isPayrollFinalized.length == 0) {
-                throw new Error("Tanggal ini sudah di payroll. Anda tidak bisa lagi menambahkan atau mengubah")
-            }
-
             // Cek apakah sudah pernah absen hari ini
             const hasAttendance = await this.todayHasAttendance(request.user_id)
 
             // Jika sudah absen, maka update absen (updated_at)
             if (hasAttendance) {
                 const response = await db.update(AttendanceSchema)
-                    .set({ updated_at: today })
+                    .set({ id: hasAttendance.id })
                     .where(eq(AttendanceSchema.id, hasAttendance.id))
                     .returning()
 

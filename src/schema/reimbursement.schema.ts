@@ -6,6 +6,6 @@ export const ReimbursementSchema = pgTable("reimbursements", {
     user_id: integer().notNull().references(() => userSchema.id),
     amount: integer().notNull(),
     description: varchar().notNull(),
-    created_at: timestamp().defaultNow().notNull(),
-    updated_at: timestamp().defaultNow().notNull()
+    created_at: timestamp({withTimezone: true}).defaultNow().notNull(),
+    updated_at: timestamp({withTimezone: true}).defaultNow().notNull()
 })

@@ -4,11 +4,12 @@ import { AttendanceValidator } from "../validator/attendance.validator";
 import { ZodError } from "zod";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.middleware";
 import { CreateAttendanceRequest } from "../model/attendance.model";
+import { checkPayrollFinalization } from "../middleware/payroll.middleware";
 
 const attendance = new Hono();
 
 attendance
-    .post(authMiddleware, roleMiddleware("employee"), async (c) => {
+    .post(authMiddleware, roleMiddleware("employee"), checkPayrollFinalization, async (c) => {
         try {
             const user = c.get("user") as { id: number }
 
