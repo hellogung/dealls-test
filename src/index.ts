@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import api from './route/index.route'
 import { requestId } from 'hono/request-id'
+import { countWeekdaysInCurrentMonth } from './lib/utils'
 
 const app = new Hono()
 
