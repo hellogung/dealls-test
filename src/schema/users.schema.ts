@@ -9,7 +9,7 @@ export const userSchema = pgTable("users", {
     full_name: varchar({ length: 255 }).notNull(),
     username: varchar({ length: 255 }).notNull().unique(),
     password: varchar({ length: 255 }).notNull(),
-    gaji: bigint({ mode: "bigint" }).notNull(),
+    salary: bigint({ mode: "bigint" }).notNull(),
     role: roleEnum().notNull().default("employee"),
     created_at: timestamp({withTimezone: true}).defaultNow().notNull(),
     updated_at: timestamp({withTimezone: true}).defaultNow().notNull()

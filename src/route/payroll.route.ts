@@ -5,7 +5,7 @@ import { ZodError } from "zod";
 import { CreatePayrollRequest } from "../model/payroll.model";
 import { PayrollService } from "../service/payroll.service";
 
-const payroll = new Hono
+const payroll = new Hono()
 
 payroll
     .post(authMiddleware, roleMiddleware("admin"), async (c) => {
@@ -20,7 +20,7 @@ payroll
 
             const response = await PayrollService.create(validate)
 
-            return c.json(response)
+            return c.json({ data: response })
         }
         catch (error) {
             if (error instanceof ZodError) {

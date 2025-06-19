@@ -8,6 +8,7 @@ type UserPayload = {
     id: number
     full_name: string
     username: string
+    salary: number | bigint
     role: "admin" | "employee"
 }
 
@@ -17,6 +18,7 @@ export const authMiddleware: MiddlewareHandler<{ Variables: { user: UserPayload 
 
     try {
         const decoded = await verify(token, SECRET_KEY!) as UserPayload
+        
         c.set("user", decoded)
         await next()
     } catch (error) {

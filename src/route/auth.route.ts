@@ -25,6 +25,7 @@ auth.post("login", async (c) => {
         id: user[0].id,
         role: user[0].role,
         full_name: user[0].full_name,
+        salary: Number(user[0].salary),
         username: user[0].username,
         exp: Math.floor(Date.now() / 1000) + 60 * 60, // Token expires in 1 hour
     }

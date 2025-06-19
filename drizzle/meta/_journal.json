@@ -15,6 +15,13 @@
       "when": 1750232845597,
       "tag": "0001_outgoing_tempest",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750284831600,
+      "tag": "0002_modern_demogoblin",
+      "breakpoints": true
     }
   ]
 }

@@ -3,11 +3,11 @@ import overtime from "../route/overtime.route"
 
 export type GetPayslipRequest = {
     user_id: number,
+    salary: number | bigint,
     month: string, // YYYY-MM
 }
 
-export type PayslipResponse = {
-    message: string,
+export type PayslipRequest = {
     user_id: number,
     attendances: ListAttendanceAffectedWithSalary[],
     overtimes: ListOvertimeAffectedWithSalary[],
@@ -15,7 +15,11 @@ export type PayslipResponse = {
     total_take_home_pay: number | bigint
 }
 
-type PayslipRequestDTO = PayslipResponse
+// type PayslipRequestDTO = PayslipResponse
+export type PayslipResponse = PayslipRequest & {
+    message: string;
+    salary: number | bigint
+}
 
 type ListAttendanceAffectedWithSalary = {
     date: Date,
@@ -33,7 +37,7 @@ type ListReimburses = {
     description: string
 }
 
-export function toPayslipResponse(data: PayslipRequestDTO, salary: number | bigint = 5_000_000): PayslipResponse {
+export function toPayslipResponse(data: PayslipResponse, salary: number | bigint = 5_000_000): PayslipResponse {
     const count_days_in_this_month: number = countWeekdaysInCurrentMonth()
     const salary_per_day: number = Number(salary) / count_days_in_this_month
     const salary_per_hours: number = salary_per_day / 8
@@ -57,11 +61,12 @@ export function toPayslipResponse(data: PayslipRequestDTO, salary: number | bigi
 
     return {
         message: "Detail Payslip",
+        salary: data.salary,
         user_id: data.user_id,
         attendances: data.attendances.map((item: ListAttendanceAffectedWithSalary) => (
             {
                 date: item.date,
-                salary: item.salary
+                salary: salary_per_day
             }
         )),
         overtimes: data.overtimes.map((item: ListOvertimeAffectedWithSalary) => ({
@@ -76,3 +81,6 @@ export function toPayslipResponse(data: PayslipRequestDTO, salary: number | bigi
         total_take_home_pay
     }
 }
+
+
+// ! ERROR
